@@ -1,0 +1,9 @@
+namespace: production
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - patch-deployment.yaml
+images:
+  - name: registry.example.com/argo-demo-app
+    newName: registry.example.com/argo-demo-app
+    newTag: 0.1.0

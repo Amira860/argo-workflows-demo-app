@@ -1,0 +1,8 @@
+{
+  "appName": "argo-workflows-demo-app",
+  "publicRoutes": ["/", "/health", "/api/catalog", "/api/search"],
+  "checks": {
+    "requiresHealthEndpoint": true,
+    "supportsSearch": true
+  }
+}

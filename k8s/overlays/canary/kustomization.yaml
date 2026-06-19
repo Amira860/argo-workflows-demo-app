@@ -1,0 +1,10 @@
+namespace: production
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - patch-deployment.yaml
+  - patch-service.yaml
+images:
+  - name: registry.example.com/argo-demo-app
+    newName: registry.example.com/argo-demo-app
+    newTag: canary

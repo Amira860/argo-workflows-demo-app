@@ -24,14 +24,49 @@ This project is intentionally small but structured to exercise concrete workflow
 - `k8s/base/`: base Deployment and Service manifests
 - `k8s/overlays/`: overlays for `dev`, `test`, `staging`, `prod`, `canary` and `green`
 - `policies/compliance/`: sample Conftest policies
-- `scripts/`: helper PowerShell scripts for local run and image build
+- `scripts/`: helper Bash and PowerShell scripts for local run and manifest rendering
+- `k8s/bootstrap/`: lightweight bootstrap manifests for test namespaces
 
-## Local usage
+## Ubuntu test environment
+
+Use [docs/ubuntu-argo-test-environment.md](docs/ubuntu-argo-test-environment.md) as the reference playbook for a single Ubuntu VM running Kubernetes and Argo Workflows.
+
+## Local usage on Ubuntu
+
+Install Python dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+npm ci
+```
+
+Run the app locally:
+
+```bash
+bash scripts/run-local.sh
+```
+
+Run Python tests:
+
+```bash
+pytest
+```
+
+Run Node tests:
+
+```bash
+npm run test:ci
+```
+
+## Local usage on Windows
 
 Install Python dependencies:
 
 ```powershell
 pip install -r requirements-dev.txt
+npm ci
 ```
 
 Run the app locally:
@@ -40,35 +75,51 @@ Run the app locally:
 powershell -ExecutionPolicy Bypass -File scripts/run-local.ps1
 ```
 
-Run Python tests:
+Run tests:
 
 ```powershell
 pytest
-```
-
-Run Node tests:
-
-```powershell
-npm ci
-npm run test:ci
+npm.cmd run test:ci
 ```
 
 ## Kubernetes usage
 
+Create the namespaces used by the overlays and Argo:
+
+```bash
+kubectl apply -f k8s/bootstrap/namespaces.yaml
+```
+
 Render an overlay for inspection:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/render-kustomize.ps1 -Overlay prod
+```bash
+bash scripts/render-kustomize.sh prod
 ```
 
 Apply an overlay manually with kubectl when testing on a cluster:
 
-```powershell
+```bash
 kubectl apply -n production -k k8s/overlays/prod
+```
+
+Run a simple compliance check before deployment:
+
+```bash
+kubectl kustomize k8s/overlays/prod | conftest test -p policies/compliance -
+```
+
+Smoke test a deployed environment:
+
+```bash
+kubectl port-forward svc/myapp 8080:80 -n test
+curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8080/api/catalog
+curl 'http://127.0.0.1:8080/api/search?q=backend'
 ```
 
 ## Notes
 
 - Image names and registries are placeholders and should be adapted before pushing to a real registry.
+- The Ubuntu guide documents the recommended single-node `k3s` test environment for Argo Workflows.
 - The `green` overlay is included to support blue/green switching tests from the workflow library.
 - The database-related templates in the library still need a real PostgreSQL target and backup PVC to be exercised end-to-end.

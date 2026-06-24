@@ -1,6 +1,4 @@
 namespace: production
 resources:
-  - ../../base/deployment.yaml
+  - deployment.yaml
 nameSuffix: -green
-patchesStrategicMerge:
-  - patch-deployment.yaml

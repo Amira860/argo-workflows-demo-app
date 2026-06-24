@@ -1,9 +1,7 @@
 namespace: production
 resources:
-  - ../../base/service.yaml
+  - service.yaml
   - deployment.yaml
-patchesStrategicMerge:
-  - patch-service.yaml
 images:
   - name: docker.io/argoprojregistry/argo-workflows-demo-app
     newName: docker.io/argoprojregistry/argo-workflows-demo-app

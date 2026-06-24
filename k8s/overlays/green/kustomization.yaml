@@ -1,4 +1,5 @@
 namespace: production
 resources:
   - deployment.yaml
+  - service.yaml
 nameSuffix: -green

@@ -119,7 +119,7 @@ curl 'http://127.0.0.1:8080/api/search?q=backend'
 
 ## Notes
 
-- Image names and registries are placeholders and should be adapted before pushing to a real registry.
+- The default image repository is `docker.io/argoprojregistry/argo-workflows-demo-app`; build and push that image before testing deployments.
 - The Ubuntu guide documents the recommended single-node `k3s` test environment for Argo Workflows.
 - The `green` overlay is included to support blue/green switching tests from the workflow library.
 - The database-related templates in the library still need a real PostgreSQL target and backup PVC to be exercised end-to-end.

@@ -5,6 +5,6 @@ patchesStrategicMerge:
   - patch-deployment.yaml
   - patch-service.yaml
 images:
-  - name: registry.example.com/argo-demo-app
-    newName: registry.example.com/argo-demo-app
+  - name: docker.io/argoprojregistry/argo-workflows-demo-app
+    newName: docker.io/argoprojregistry/argo-workflows-demo-app
     newTag: canary

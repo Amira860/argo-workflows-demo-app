@@ -137,32 +137,37 @@ kubectl get ns argo dev test staging production
 
 ## Prepare the application image
 
-The Kubernetes overlays still use placeholder image names. Before running deployment workflows, replace `registry.example.com/argo-demo-app` with a real registry path that your cluster can pull.
+The Kubernetes overlays are configured to use `docker.io/argoprojregistry/argo-workflows-demo-app`. Push that image before running deployment workflows.
 
 Recommended path:
 
-1. Choose a registry such as Docker Hub, GHCR or a private registry.
-2. Update the `images.newName` value in each overlay to that registry path.
-3. Build and push the image.
+1. Log in to Docker Hub with the `argoprojregistry` account.
+2. Build and push the image.
+3. Publish the environment tags used by the overlays.
 
 Example:
 
 ```bash
-docker build -t ghcr.io/<org>/argo-demo-app:0.1.0 .
-docker push ghcr.io/<org>/argo-demo-app:0.1.0
+docker login
+docker build -t docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 .
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0
 ```
 
-You can also publish environment tags used by the overlays:
+If the Docker Hub repository does not exist yet, the first successful push creates it. You can also create it manually in the Docker Hub UI.
+
+Publish the environment tags used by the overlays:
 
 ```bash
-docker tag ghcr.io/<org>/argo-demo-app:0.1.0 ghcr.io/<org>/argo-demo-app:test
-docker tag ghcr.io/<org>/argo-demo-app:0.1.0 ghcr.io/<org>/argo-demo-app:staging
-docker tag ghcr.io/<org>/argo-demo-app:0.1.0 ghcr.io/<org>/argo-demo-app:canary
-docker tag ghcr.io/<org>/argo-demo-app:0.1.0 ghcr.io/<org>/argo-demo-app:green
-docker push ghcr.io/<org>/argo-demo-app:test
-docker push ghcr.io/<org>/argo-demo-app:staging
-docker push ghcr.io/<org>/argo-demo-app:canary
-docker push ghcr.io/<org>/argo-demo-app:green
+docker tag docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 docker.io/argoprojregistry/argo-workflows-demo-app:dev
+docker tag docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 docker.io/argoprojregistry/argo-workflows-demo-app:test
+docker tag docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 docker.io/argoprojregistry/argo-workflows-demo-app:staging
+docker tag docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 docker.io/argoprojregistry/argo-workflows-demo-app:canary
+docker tag docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0 docker.io/argoprojregistry/argo-workflows-demo-app:green
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:dev
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:test
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:staging
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:canary
+docker push docker.io/argoprojregistry/argo-workflows-demo-app:green
 ```
 
 ## First manual deployment checks

@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: registry.example.com/argo-demo-app:0.1.0
+          image: docker.io/argoprojregistry/argo-workflows-demo-app:0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
